@@ -51,7 +51,7 @@
         <button (click)="switchLanguage('en')">English</button>
         <button (click)="switchLanguage('ar')">Arabic</button>
       </div>
-      <h1>Hello, {{ 'Home.Title' | translate }}</h1>
+      <h1>Hello, {{ 'Home.Title' | translate | async }}</h1>
       <h1>Hello, {{ title }}</h1>
       <h1>Hello, {{ '2024-10-10' | date: 'YYYY/MM/dd' }}</h1>
       <h1>Hello, {{ {name: 'mohammed'} | json }}</h1>

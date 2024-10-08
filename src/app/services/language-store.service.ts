@@ -6,31 +6,36 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class LanguageStoreService {
-  languageSubject = new BehaviorSubject<string>('ar');
+  languageSubject = new BehaviorSubject<string>(localStorage.getItem('language') || 'en');
   language$ = this.languageSubject.asObservable();
 
-  constructor( private translate: TranslateService) { 
+  constructor(private translate: TranslateService) {
     this.translate.addLangs(['en', 'ar']);
     this.translate.setDefaultLang(this.languageSubject.value);
     this.translate.use(this.languageSubject.value);
-    
+    this.setRtl(this.languageSubject.value)
   }
 
-  changeLanguage(language: string){
+  changeLanguage(language: string) {
     this.languageSubject.next(language)
     this.translate.setDefaultLang(language);
     this.translate.use(language)
-    this.translate.onLangChange.subscribe(event=>{
+    localStorage.setItem('language', language)
+    this.translate.onLangChange.subscribe(event => {
 
     })
+    this.setRtl(language)
+
+  }
+
+  setRtl(language: string) {
     // add or remove rtl styles
-    if(language ==='ar'){
-    document.querySelector('head')?.append('<link id="rtl" rel="stylesheet" href="your-rtl-style.css/>')
-    document.querySelector('body')!.dir = "rtl";
-    }else{
+    if (language === 'ar') {
+      document.querySelector('head')?.append('<link id="rtl" rel="stylesheet" href="your-rtl-style.css/>')
+      document.querySelector('body')!.dir = "rtl";
+    } else {
       document.querySelector('#rtl')?.remove()
       document.querySelector('body')!.dir = "ltr";
     }
-
   }
 }
